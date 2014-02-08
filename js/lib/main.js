@@ -9,7 +9,13 @@ var image = ["p",
 				380, 400,
 				400, 300,
 				250, 250,
-				400, 220
+				400, 220,
+			"s",
+				400, 50,
+				50, 50,
+			"s",
+				600, 60,
+				50, 80
 			];
 
 var drawFunctions = {
@@ -79,7 +85,14 @@ function drawPath (args) {
 }
 
 function drawSquare (args) {
-	console.log("time to draw a square " + args);
+	var x = args[0];
+	var y = args[1];
+	var width = args[2];
+	var height = args[3];
+	
+	ctx.beginPath();
+	ctx.rect(x, y, width, height);
+	ctx.stroke();
 }
 
 
