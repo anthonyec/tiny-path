@@ -10,17 +10,38 @@ var image = ["p",
 				400, 300,
 				250, 250,
 				400, 220,
+			"#f",
+				"orange",
+			"#s",
+				"black", 2,
 			"s",
 				400, 50,
 				50, 50,
 			"s",
 				600, 60,
-				50, 80
+				50, 80,
+			"#f",
+				"blue",
+			"#s",
+				"red", 10,
+			"e",
+				50, 50,
+				100, 100,
+			"e",
+				100, 20,
+				200, 50,
+			"c",
+				100, 20,
+				10,
 			];
 
 var drawFunctions = {
-	"p": "drawPath",
-	"s": "drawSquare"
+	"#f": "defineFill",
+	"#s": "defineStroke",
+	"p"	: "drawPath",
+	"s"	: "drawSquare",
+	"c"	: "drawCircle",
+	"e"	: "drawEllipse"
 }
 
 function returnImageSplit (arr) {
@@ -28,8 +49,10 @@ function returnImageSplit (arr) {
 	var parts = [];
 
 	for (var i=arr.length-1; i>=0; i--) {
-		if (typeof(arr[i]) == "string") {
-			splits.push(i);
+		for (var key in drawFunctions) {
+			if (arr[i] == key) {
+				splits.push(i);
+			}
 		}
 	};
 
@@ -47,12 +70,28 @@ function callDrawFunctions (arr) {
 				argArray = arr[i].slice(1, arr.length[i]);
 				func = drawFunctions[key];
 				window[func](argArray);
+
+				console.log(drawFunctions[key]);
 			}
 		}
 	};
 }
 
 var ctx = document.getElementById("tiny-path-canvas").getContext('2d');
+
+function defineFill (args) {
+	var colour = args[0];
+
+	ctx.fillStyle = colour;
+}
+
+function defineStroke (args) {
+	var colour = args[0];
+	var width = args[1];
+
+	ctx.strokeStyle = colour;
+	ctx.lineWidth = width;
+}
 
 function drawPath (args) {
 	var isX = true;
@@ -72,7 +111,6 @@ function drawPath (args) {
 		if (!isX) { // Only want to draw after it has recieved the 2 values
 			if (i > args.length-3 && i < args.length-1) {
 				ctx.moveTo(x, y);
-				console.log("Move to: "+x+":"+y);
 			} else {
 				ctx.lineTo(x, y);
 			}
@@ -82,19 +120,59 @@ function drawPath (args) {
 	};
 
 	ctx.stroke();
+	ctx.fill();
 }
 
 function drawSquare (args) {
 	var x = args[0];
 	var y = args[1];
-	var width = args[2];
-	var height = args[3];
-	
+	var w = args[2];
+	var h = args[3];
+
 	ctx.beginPath();
-	ctx.rect(x, y, width, height);
+	ctx.rect(x, y, w, h);
 	ctx.stroke();
+	ctx.fill();
 }
 
+function drawCircle (args) {
+	var x = args[0];
+	var y = args[1];
+	var r = args[2];
+
+	ctx.beginPath();
+	ctx.arc(x, y, r, 0, 2*Math.PI);
+	ctx.stroke();
+	ctx.fill();
+}
+
+function drawEllipse (args) { 	// http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas
+	var x = args[0];
+	var y = args[1];
+	var w = args[2];
+	var h = args[3];
+
+	  var kappa = .5522848,
+	      ox = (w / 2) * kappa, // control point offset horizontal
+	      oy = (h / 2) * kappa, // control point offset vertical
+	      xe = x + w,           // x-end
+	      ye = y + h,           // y-end
+	      xm = x + w / 2,       // x-middle
+	      ym = y + h / 2;       // y-middle
+
+	  ctx.beginPath();
+	  ctx.moveTo(x, ym);
+	  ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+	  ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+	  ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+	  ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+	  ctx.closePath();
+	  ctx.stroke();
+	  ctx.fill();
+}
+
+ctx.fillStyle = "rgba(0, 0, 0, 0)";
+ctx.strokeStyle = "rgba(0, 0, 0, 1)";
 
 callDrawFunctions(returnImageSplit(image));
 
