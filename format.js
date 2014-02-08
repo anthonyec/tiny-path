@@ -47,3 +47,17 @@ Tiny Path Format
 02, "S000", "FFFF", 15, 15, 10, 10, 
 02, "S000", "Fededed", 12, 12, 1.5, 1.5, 
 00, "S000", "FFFF", 10, 19, 15, 25, 20, 19
+
+
+// maybe even math functions to repeat stuff
+// this would make a grid of a 100 squares with padding of 5
+"s", "20*10+5", "10*10+5", 10, 10, 
+
+// This might be better. Do this action 5 times and use the i variable thing
+"s", "x5", "10*i+5", "10*i+5", 10, 10, 
+
+// Or to fit in with the current way, it calls an X function that calls another function
+// so that you dont have to have all the maths inside your own function OH BOY THIS 
+// IS A BETTER WAY
+// Multiply/Loop function call the Square Function 5 times
+"x", 5, "s", 10*i+5, 10*i+5, 50, 50+i*5, 

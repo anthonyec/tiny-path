@@ -9,8 +9,6 @@ function inArray (term, arr) {
 
 var ctx = document.getElementById("tiny-path-canvas").getContext('2d');
 
-// var image = ["p", 1, 1, 600, 400];
-
 var image = ["p", 
 				1, 1, 
 				600, 400, 
@@ -52,8 +50,23 @@ function returnImageSplit (arr) {
 	return parts;
 }
 
-function callDrawFunctions () {
+function callDrawFunctions (arr) {
+	for (var i=arr.length-1; i>=0; i--) {
+		for (var key in drawFunctions) {
+			if (key == arr[i][0]) {
+				func = drawFunctions[key];
+				window[func](arr[i]);
+			}
+		}
+	};
+}
 
+function drawPath (arr) {
+	console.log("time to draw a path " + arr);
+}
+
+function drawSquare (arr) {
+	console.log("time to draw a square " + arr);
 }
 
 // TinyPath.prototype.drawBezier (arr) {
@@ -63,3 +76,5 @@ function callDrawFunctions () {
 // TinyPath.register("b", TinyPath.drawBezier);
 
 console.log(returnImageSplit(image));
+
+callDrawFunctions(returnImageSplit(image));
