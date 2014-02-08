@@ -1,31 +1,15 @@
-function inArray (term, arr) {
-	var length = arr.length;
-
-	for (var i = 0; i < length; i++) {
-		if (arr[i] == term) return true;
-	}
-}
-
-
-var ctx = document.getElementById("tiny-path-canvas").getContext('2d');
-
 var image = ["p", 
-				1, 1, 
-				600, 400, 
-				500, 300, 
-				200, 100,
-			"p",
-				500, 500,
-				300, 200,
-				100, 100,
-				400, 400,
-				500, 500,
-				550, 550,
-				650, 650,
-				0, 0,
-			"s",
-				10, 10,
-				300, 200
+				100, 250, 
+				250, 100,
+				200, 300,
+				150, 250,
+				200, 220,
+			"p", 
+				280, 250, 
+				380, 400,
+				400, 300,
+				250, 250,
+				400, 220
 			];
 
 var drawFunctions = {
@@ -54,27 +38,56 @@ function callDrawFunctions (arr) {
 	for (var i=arr.length-1; i>=0; i--) {
 		for (var key in drawFunctions) {
 			if (key == arr[i][0]) {
+				argArray = arr[i].slice(1, arr.length[i]);
 				func = drawFunctions[key];
-				window[func](arr[i]);
+				window[func](argArray);
 			}
 		}
 	};
 }
 
-function drawPath (arr) {
-	console.log("time to draw a path " + arr);
+var ctx = document.getElementById("tiny-path-canvas").getContext('2d');
+
+function drawPath (args) {
+	var isX = true;
+	var x;
+	var y;
+
+	ctx.beginPath();
+
+	for (var i=args.length-1; i>=0; i--) {
+
+		if (!isX) {
+			x = args[i];
+		} else {
+			y = args[i];
+		}
+
+		if (!isX) { // Only want to draw after it has recieved the 2 values
+			if (i > args.length-3 && i < args.length-1) {
+				ctx.moveTo(x, y);
+				console.log("Move to: "+x+":"+y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+
+		isX = !isX;
+	};
+
+	ctx.stroke();
 }
 
-function drawSquare (arr) {
-	console.log("time to draw a square " + arr);
+function drawSquare (args) {
+	console.log("time to draw a square " + args);
 }
+
+
+callDrawFunctions(returnImageSplit(image));
+
 
 // TinyPath.prototype.drawBezier (arr) {
 
 // }
 
 // TinyPath.register("b", TinyPath.drawBezier);
-
-console.log(returnImageSplit(image));
-
-callDrawFunctions(returnImageSplit(image));
