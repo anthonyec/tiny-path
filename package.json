@@ -1,0 +1,55 @@
+{
+
+  "name": "tiny-path",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anthonyec/tiny-path"
+  },
+
+  "devDependencies": {
+    "gulp-util": "~2.2.14",
+    "gulp": "~3.5.1",
+    "gulp-concat": "~2.1.7",
+    "gulp-uglify": "~0.2.0",
+    "gulp-ruby-sass": "~0.3.0",
+    "gulp-autoprefixer": "0.0.6",
+    "gulp-ftp": "~0.1.1",
+    "browser-sync": "~0.5.6"
+  },
+
+  "globs": {
+    "task": {
+      "js": "js/lib/*.js",
+      "sass": ["sass/**/*.sass", "!**/_*.sass", "!_*.sass"]
+    },
+    "watch": {
+      "sass": ["sass/**/*.sass"],
+      "js": ["js/**/*.js", "!**/live.js"]
+    },
+    "build": {
+      "ftp": ["**/*", "!./node_modules/**", "!./sass/**", "!./*.js", "!./*.json", "!./*.md"],
+      "zip": ["**/*", "!./node_modules/**"]
+    }
+  },
+
+  "config": {
+    "sass": {
+      "style": "compressed", 
+      "noCache": false
+    }
+  },
+
+  "output": {
+    "js": {
+      "dest": "js/min",
+      "name": "main.min.js"
+    },
+    "sass": {
+      "dest": "css"
+    },
+    "ftp": {
+      "dest": "anthonycossins.com/design2/"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+// function draw (context, img) {
+// 	context.beginPath();
+// 	context.moveTo(0,0);
+// 	context.lineTo(300,150);
+// 	context.stroke();
+
+// 	var mode;
+// 	var axisX = false;
+
+// 	for (var i=0; i<img.length; i++) {
+// 		if (img[i] == "p") {
+// 			mode = "path";
+// 			console.log("path");
+// 		}
+
+// 		if (typeof(img[i]) == "number") {
+// 			if (mode == "path") {
+// 				axisX = !axisX;
+
+// 				if (axisX) {
+// 					console.log(" X" + img[i]);
+// 				} else {
+// 					console.log(" Y" + img[i]);
+// 				}			
+// 			}
+// 		}
+// 	}
+
+
+// }
+
+// draw(ctx, image);
