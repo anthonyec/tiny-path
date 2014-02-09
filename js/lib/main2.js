@@ -15,7 +15,7 @@ var TinyPath = function (canvas, array) {
 	}
 
 	this.draw = function () {
-		console.log(this.returnImageSplit());
+		this.renderScene(this.returnImageSplit());
 	}
 
 	this.initialise();
@@ -61,7 +61,7 @@ TinyPath.prototype.returnImageSplit = function () {
 		if (value.length == 2 && typeof value == "string") {
 			valuePrefix = value.substring(0, 1);
 
-			if (this.isPrefix(valuePrefix) && this.isDrawFunction(value)) {
+			if (this.isPrefix(valuePrefix)) {
 				splits.push(i);
 			}
 		}
@@ -75,31 +75,38 @@ TinyPath.prototype.returnImageSplit = function () {
 }
 
 
-TinyPath.prototype.callDrawFunction = function () {
+TinyPath.prototype.callDrawFunction = function (singleArray) {
+	var targetFunction = singleArray[0];
+	var argArray = singleArray.slice(1, singleArray.length);
 
+	if (this.isDrawFunction(targetFunction)) {
+		var func = this.drawFunctions[targetFunction];
+
+		func.draw(argArray);
+	}
 }
 
-// TinyPath.prototype.callAllDrawFunctions = function () {
-// 	var arr = this.arr;
+TinyPath.prototype.renderScene = function (imageSplitArray) {
+	var imageArray = imageSplitArray;
 
-// 	for (var i=arr.length-1; i>=0; i--) {
-// 		for (var key in drawFunctions) {
-// 			if (key == arr[i][0]) {
-// 				argArray = arr[i].slice(1, arr.length[i]);
-// 				func = drawFunctions[key];
-// 				// window[func](argArray);
-// 			}
-// 		}
-// 	};
-// }
+	for (var i=0; i<imageArray.length; i++) {
+		var singleArray = imageArray[i];
+
+		this.callDrawFunction(singleArray);
+	}
+}
+
+
+
+// Draw Tools
 
 TinyPath.prototype.drawPath = {
 	init: function (parent) {
 		parent.register(":p", this);
 	},
 
-	draw: function () {
-		// Draw Code
+	draw: function (args) {
+		console.log("Path: ", args);
 	}
 }
 
@@ -108,8 +115,8 @@ TinyPath.prototype.drawSquare = {
 		parent.register(":s", this);
 	},
 
-	draw: function () {
-		//console.log("IM DRAWING");
+	draw: function (args) {
+		console.log("Square: ", args);
 	}
 }
 
@@ -118,8 +125,8 @@ TinyPath.prototype.drawCircle = {
 		parent.register(":c", this);
 	},
 
-	draw: function () {
-		// Draw Code
+	draw: function (args) {
+		console.log("Circle: ", args);
 	}
 }
 
@@ -128,8 +135,8 @@ TinyPath.prototype.drawEclipse = {
 		parent.register(":e", this);
 	},
 
-	draw: function () {
-		// Draw Code
+	draw: function (args) {
+		console.log("Eclipse: ", args);
 	}
 }
 
