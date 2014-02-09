@@ -1,5 +1,5 @@
 var TinyPath = function (canvas, array) {
-	this.ctx = canvas;
+	this.canvas = canvas;
 	this.arr = array;
 	this.prefixes = ":$";
 	this.drawFunctions = {};
@@ -96,106 +96,110 @@ TinyPath.prototype.renderScene = function (imageSplitArray) {
 	}
 }
 
-
-
 // Draw Tools
 
 TinyPath.prototype.drawPath = {
 	init: function (parent) {
 		parent.register(":p", this);
+		this.ctx = parent.canvas;
 	},
 
 	draw: function (args) {
-		console.log("Path: ", args);
+		var isX = true;
+		var x;
+		var y;
+
+		this.ctx.beginPath();
+
+		for (var i=args.length-1; i>=0; i--) {
+
+			if (!isX) {
+				x = args[i];
+			} else {
+				y = args[i];
+			}
+
+			if (!isX) { 												// Only want to draw after it has recieved the 2 values
+				if (i > args.length-3 && i < args.length-1) {
+					this.ctx.moveTo(x, y);
+				} else {
+					this.ctx.lineTo(x, y);
+				}
+			}
+
+			isX = !isX;
+		};
+
+		this.ctx.stroke();
+		this.ctx.fill();
 	}
 }
 
 TinyPath.prototype.drawSquare = {
 	init: function (parent) {
 		parent.register(":s", this);
+		this.ctx = parent.canvas;
 	},
 
 	draw: function (args) {
-		console.log("Square: ", args);
+		var x = args[0];
+		var y = args[1];
+		var w = args[2];
+		var h = args[3];
+
+		this.ctx.beginPath();
+		this.ctx.rect(x, y, w, h);
+		this.ctx.stroke();
+		this.ctx.fill();
 	}
 }
 
 TinyPath.prototype.drawCircle = {
 	init: function (parent) {
 		parent.register(":c", this);
+		this.ctx = parent.canvas;
 	},
 
 	draw: function (args) {
-		console.log("Circle: ", args);
+		var x = args[0];
+		var y = args[1];
+		var r = args[2];
+
+		this.ctx.beginPath();
+		this.ctx.arc(x, y, r, 0, 2*Math.PI);
+		this.ctx.stroke();
+		this.ctx.fill();
 	}
 }
 
-TinyPath.prototype.drawEclipse = {
+TinyPath.prototype.drawEclipse = {						// http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas
 	init: function (parent) {
 		parent.register(":e", this);
+		this.ctx = parent.canvas;
 	},
 
 	draw: function (args) {
-		console.log("Eclipse: ", args);
+		var x = args[0];
+		var y = args[1];
+		var w = args[2];
+		var h = args[3];
+
+		var kappa = .5522848,
+			ox = (w / 2) * kappa, // control point offset horizontal
+			oy = (h / 2) * kappa, // control point offset vertical
+			xe = x + w,           // x-end
+			ye = y + h,           // y-end
+			xm = x + w / 2,       // x-middle
+			ym = y + h / 2;       // y-middle
+
+		this.ctx.beginPath();
+		this.ctx.moveTo(x, ym);
+		this.ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+		this.ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+		this.ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+		this.ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+		this.ctx.closePath();
+		this.ctx.stroke();
+		this.ctx.fill();
 	}
 }
-
-
-
-
-
-var image = [":p", 
-				100, 250, 
-				250, 100,
-				200, 300,
-				150, 250,
-				200, 220,
-			":p", 
-				280, 250, 
-				380, 400,
-				400, 300,
-				250, 250,
-				400, 220,
-			":x", 
-				50, ">s", 
-				"400+5*i", "390+0", 
-				"2", "Math.sin(i/10)*100-100", 
-			"$f",
-				"red",
-			":x", 
-				20, ">s", 
-				"400+15*i", "400+-i*10", 
-				"10", "10+i*10", 
-			"$f",
-				"orange",
-			"$s",
-				"black", 2,
-			":s",
-				400, 50,
-				50, 50,
-			":s",
-				600, 60,
-				50, 80,
-			"$f",
-				"blue",
-			"$s",
-				"red", 10,
-			":e",
-				50, 50,
-				100, 100,
-			":e",
-				100, 20,
-				200, 50,
-			":c",
-				100, 20,
-				10,
-			":x", 
-				5, ">s", 
-				"10+5*i", "10+60*i", 
-				"50", "50", 
-			];
-
-var canvas = document.getElementById("tiny-path-canvas").getContext('2d');
-var newImage = new TinyPath(canvas, image).draw();
-
-// console.log(newImage);
