@@ -1,7 +1,7 @@
 var TinyPath = function (canvas, array) {
 	this.canvas = canvas;
 	this.arr = array;
-	this.dpi = 1;
+	this.scale = 1;
 	this.prefixes = ":$";
 	this.drawFunctions = {};
 
@@ -18,7 +18,7 @@ var TinyPath = function (canvas, array) {
 	this.draw = function () {
 		this.canvas.fillStyle = "rgba(255, 255, 255, 0)";	// Defaults for now
 		this.canvas.strokeStyle = "black";
-		this.canvas.lineWidth = 1*this.dpi;
+		this.canvas.lineWidth = 1*this.scale;
 
 		this.renderScene(this.returnImageSplit());
 	}
@@ -110,7 +110,7 @@ TinyPath.prototype.drawPath = {
 	init: function (parent) {
 		parent.register(":p", this);
 		this.ctx = parent.canvas;
-		this.dpi = parent.dpi;
+		this.scale = parent.scale;
 	},
 
 	draw: function (args) {
@@ -123,9 +123,9 @@ TinyPath.prototype.drawPath = {
 		for (var i=args.length-1; i>=0; i--) {
 
 			if (!isX) {
-				x = args[i]*this.dpi;
+				x = args[i]*this.scale;
 			} else {
-				y = args[i]*this.dpi;
+				y = args[i]*this.scale;
 			}
 
 			if (!isX) { 												// Only want to draw after it has recieved the 2 values
@@ -148,14 +148,14 @@ TinyPath.prototype.drawSquare = {
 	init: function (parent) {
 		parent.register(":s", this);
 		this.ctx = parent.canvas;
-		this.dpi = parent.dpi;
+		this.scale = parent.scale;
 	},
 
 	draw: function (args) {
-		var x = args[0]*this.dpi;
-		var y = args[1]*this.dpi;
-		var w = args[2]*this.dpi;
-		var h = args[3]*this.dpi;
+		var x = args[0]*this.scale;
+		var y = args[1]*this.scale;
+		var w = args[2]*this.scale;
+		var h = args[3]*this.scale;
 
 		this.ctx.beginPath();
 		this.ctx.rect(x, y, w, h);
@@ -168,13 +168,13 @@ TinyPath.prototype.drawCircle = {
 	init: function (parent) {
 		parent.register(":c", this);
 		this.ctx = parent.canvas;
-		this.dpi = parent.dpi;
+		this.scale = parent.scale;
 	},
 
 	draw: function (args) {
-		var x = args[0]*this.dpi;
-		var y = args[1]*this.dpi;
-		var r = args[2]*this.dpi;
+		var x = args[0]*this.scale;
+		var y = args[1]*this.scale;
+		var r = args[2]*this.scale;
 
 		this.ctx.beginPath();
 		this.ctx.arc(x, y, r, 0, 2*Math.PI);
@@ -187,14 +187,14 @@ TinyPath.prototype.drawEclipse = {						// http://stackoverflow.com/questions/21
 	init: function (parent) {
 		parent.register(":e", this);
 		this.ctx = parent.canvas;
-		this.dpi = parent.dpi;
+		this.scale = parent.scale;
 	},
 
 	draw: function (args) {
-		var x = args[0]*this.dpi;
-		var y = args[1]*this.dpi;
-		var w = args[2]*this.dpi;
-		var h = args[3]*this.dpi;
+		var x = args[0]*this.scale;
+		var y = args[1]*this.scale;
+		var w = args[2]*this.scale;
+		var h = args[3]*this.scale;
 
 		var kappa = .5522848,
 			ox = (w / 2) * kappa, // control point offset horizontal
@@ -233,12 +233,12 @@ TinyPath.prototype.defineStroke = {
 	init: function (parent) {
 		parent.register("$s", this);
 		this.ctx = parent.canvas;
-		this.dpi = parent.dpi;
+		this.scale = parent.scale;
 	},
 
 	draw: function (args) {
 		var colour = args[0];
-		var width = args[1]*this.dpi;
+		var width = args[1]*this.scale;
 
 		this.ctx.strokeStyle = colour;
 		this.ctx.lineWidth = width;
@@ -277,15 +277,15 @@ TinyPath.prototype.drawRoundedRect = {							// http://stackoverflow.com/questio
 	init: function (parent) {
 		parent.register(":r", this);
 		this.ctx = parent.canvas;
-		this.dpi = parent.dpi;
+		this.scale = parent.scale;
 	},
 
 	draw: function (args) {
-		var x = args[0]*this.dpi;
-		var y = args[1]*this.dpi;
-		var width = args[2]*this.dpi;
-		var height = args[3]*this.dpi;
-		var radius = args[4]*this.dpi;
+		var x = args[0]*this.scale;
+		var y = args[1]*this.scale;
+		var width = args[2]*this.scale;
+		var height = args[3]*this.scale;
+		var radius = args[4]*this.scale;
 
 		
 		this.ctx.beginPath();
