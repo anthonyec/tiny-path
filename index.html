@@ -15,7 +15,7 @@
 	</div>
 
 	<div class="thumb">
-		<canvas id="tiny-path-canvas-1" width="420" height="280"></canvas>
+		<canvas id="tiny-path-canvas-2" width="420" height="280"></canvas>
 	</div>
 
 	<script type="text/javascript" src="js/lib/tinypath.js"></script>
@@ -40,10 +40,18 @@
 						":r", 158, 72, 103, 103, 17,
 					];
 
-	var canvas = document.getElementById("tiny-path-canvas-1").getContext('2d');
-	var newImage = new TinyPath(canvas, thumb1).draw();
+		var thumb2 = [	
+						":x", 40, ">:p", 210, 140, "(210+50)*Math.cos( (i+50)*Math.PI/180 )", "(140+50)*Math.sin( (i+50)*Math.PI/180 )"
+					];
 
-	canvas.translate(0.5, 0.5);
+	var canvas1 = document.getElementById("tiny-path-canvas-1").getContext("2d");
+	var newImage1 = new TinyPath(canvas1, thumb1).draw();
+
+	var canvas2 = document.getElementById("tiny-path-canvas-2").getContext("2d");
+	var newImage2 = new TinyPath(canvas2, thumb2).draw();
+
+	canvas1.translate(0.5, 0.5);
+	canvas2.translate(0.5, 0.5);
 
 	document.getElementById("tiny-path-canvas-1").onclick = function (e) {
 		console.log( (e.x-100) + ", " + (e.y-100));
