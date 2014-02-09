@@ -96,7 +96,9 @@ TinyPath.prototype.drawImage = {
 
 Using the Loop function AKA the one know as ":x"
 =================
-The loop function allows you to loop any drawing function a set number of times and change the arguments on each iteration. It's really powerful and can create some amazing effects. It could probably also be dangerous. It uses the eval function as a quick and dirty way to evaulate the arguments. Which is cool because it allows you to use any of Javascripts math functions but can also type in any other Javascript and it will excute it.
+The loop function allows you to loop any drawing function a set number of times and change the arguments on each iteration. It's really powerful and can create some amazing effects. It could probably also be dangerous. 
+
+It uses the eval function as a quick and dirty way to evaulate the arguments. Which is cool because it allows you to use any of the math functions but you can also type in any other kind of Javascript and it will excute it.
 
 Someone once added a console.log to the arguments and it printed out a naughty word 100 times. It offended everyone watching.
 
