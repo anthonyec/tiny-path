@@ -43,7 +43,7 @@
   "output": {
     "js": {
       "dest": "js/min",
-      "name": "main.min.js"
+      "name": "tinypath.min.js"
     },
     "sass": {
       "dest": "css"
