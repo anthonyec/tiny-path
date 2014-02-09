@@ -1,6 +1,7 @@
 var TinyPath = function (canvas, array) {
 	this.canvas = canvas;
 	this.arr = array;
+	this.dpi = 1;
 	this.prefixes = ":$";
 	this.drawFunctions = {};
 
@@ -17,7 +18,7 @@ var TinyPath = function (canvas, array) {
 	this.draw = function () {
 		this.canvas.fillStyle = "rgba(255, 255, 255, 0)";	// Defaults for now
 		this.canvas.strokeStyle = "black";
-		this.canvas.lineWidth = 1;
+		this.canvas.lineWidth = 1*this.dpi;
 
 		this.renderScene(this.returnImageSplit());
 	}
@@ -109,6 +110,7 @@ TinyPath.prototype.drawPath = {
 	init: function (parent) {
 		parent.register(":p", this);
 		this.ctx = parent.canvas;
+		this.dpi = parent.dpi;
 	},
 
 	draw: function (args) {
@@ -121,9 +123,9 @@ TinyPath.prototype.drawPath = {
 		for (var i=args.length-1; i>=0; i--) {
 
 			if (!isX) {
-				x = args[i];
+				x = args[i]*this.dpi;
 			} else {
-				y = args[i];
+				y = args[i]*this.dpi;
 			}
 
 			if (!isX) { 												// Only want to draw after it has recieved the 2 values
@@ -146,13 +148,14 @@ TinyPath.prototype.drawSquare = {
 	init: function (parent) {
 		parent.register(":s", this);
 		this.ctx = parent.canvas;
+		this.dpi = parent.dpi;
 	},
 
 	draw: function (args) {
-		var x = args[0];
-		var y = args[1];
-		var w = args[2];
-		var h = args[3];
+		var x = args[0]*this.dpi;
+		var y = args[1]*this.dpi;
+		var w = args[2]*this.dpi;
+		var h = args[3]*this.dpi;
 
 		this.ctx.beginPath();
 		this.ctx.rect(x, y, w, h);
@@ -165,12 +168,13 @@ TinyPath.prototype.drawCircle = {
 	init: function (parent) {
 		parent.register(":c", this);
 		this.ctx = parent.canvas;
+		this.dpi = parent.dpi;
 	},
 
 	draw: function (args) {
-		var x = args[0];
-		var y = args[1];
-		var r = args[2];
+		var x = args[0]*this.dpi;
+		var y = args[1]*this.dpi;
+		var r = args[2]*this.dpi;
 
 		this.ctx.beginPath();
 		this.ctx.arc(x, y, r, 0, 2*Math.PI);
@@ -183,13 +187,14 @@ TinyPath.prototype.drawEclipse = {						// http://stackoverflow.com/questions/21
 	init: function (parent) {
 		parent.register(":e", this);
 		this.ctx = parent.canvas;
+		this.dpi = parent.dpi;
 	},
 
 	draw: function (args) {
-		var x = args[0];
-		var y = args[1];
-		var w = args[2];
-		var h = args[3];
+		var x = args[0]*this.dpi;
+		var y = args[1]*this.dpi;
+		var w = args[2]*this.dpi;
+		var h = args[3]*this.dpi;
 
 		var kappa = .5522848,
 			ox = (w / 2) * kappa, // control point offset horizontal
@@ -228,11 +233,12 @@ TinyPath.prototype.defineStroke = {
 	init: function (parent) {
 		parent.register("$s", this);
 		this.ctx = parent.canvas;
+		this.dpi = parent.dpi;
 	},
 
 	draw: function (args) {
 		var colour = args[0];
-		var width = args[1];
+		var width = args[1]*this.dpi;
 
 		this.ctx.strokeStyle = colour;
 		this.ctx.lineWidth = width;
@@ -265,4 +271,35 @@ TinyPath.prototype.drawLoop = {
 			tempArray = [];
 		}
 	}
+}
+
+TinyPath.prototype.drawRoundedRect = {							// http://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+	init: function (parent) {
+		parent.register(":r", this);
+		this.ctx = parent.canvas;
+		this.dpi = parent.dpi;
+	},
+
+	draw: function (args) {
+		var x = args[0]*this.dpi;
+		var y = args[1]*this.dpi;
+		var width = args[2]*this.dpi;
+		var height = args[3]*this.dpi;
+		var radius = args[4]*this.dpi;
+
+		
+		this.ctx.beginPath();
+		this.ctx.moveTo(x + radius, y);
+		this.ctx.lineTo(x + width - radius, y);
+		this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+		this.ctx.lineTo(x + width, y + height - radius);
+		this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+		this.ctx.lineTo(x + radius, y + height);
+		this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+		this.ctx.lineTo(x, y + radius);
+		this.ctx.quadraticCurveTo(x, y, x + radius, y);
+		this.ctx.closePath();
+		this.ctx.stroke();
+		this.ctx.fill();
+	}   
 }
