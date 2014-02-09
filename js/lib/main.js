@@ -10,6 +10,10 @@ var image = ["p",
 				400, 300,
 				250, 250,
 				400, 220,
+			"x", 
+				20, "-s", 
+				"400+15*i", "400+-i*10", 
+				"10", "10+i*10", 
 			"#f",
 				"orange",
 			"#s",
@@ -33,6 +37,10 @@ var image = ["p",
 			"c",
 				100, 20,
 				10,
+			"x", 
+				5, "-s", 
+				"10+5*i", "10+60*i", 
+				"50", "50", 
 			];
 
 var drawFunctions = {
@@ -41,7 +49,8 @@ var drawFunctions = {
 	"p"	: "drawPath",
 	"s"	: "drawSquare",
 	"c"	: "drawCircle",
-	"e"	: "drawEllipse"
+	"e"	: "drawEllipse",
+	"x"	: "drawLoop"
 }
 
 function returnImageSplit (arr) {
@@ -70,14 +79,52 @@ function callDrawFunctions (arr) {
 				argArray = arr[i].slice(1, arr.length[i]);
 				func = drawFunctions[key];
 				window[func](argArray);
-
-				console.log(drawFunctions[key]);
 			}
 		}
 	};
 }
 
 var ctx = document.getElementById("tiny-path-canvas").getContext('2d');
+
+function drawLoop (args) {
+	var times = args[0];
+	var func = args[1].split("-")[1];
+	var params = args.splice(2, args.length);
+
+	var temp = params[1];
+	var number = temp.split("+");
+	var offset = number[1].split("*")[0];
+
+	// for (var i=0; i<times; i++) {
+	// 	// console.log(parseFloat(number)+parseFloat(offset)*i);
+	// 	console.log(eval(temp));
+	// }
+	var tempArray = [];
+
+	for (var i=0; i<times; i++) {
+		for (var j=0; j<params.length; j++) {
+			var param = params[j];
+			var calc = eval(param);
+			tempArray.push(calc);
+
+			// if (j == params.length) {
+			// 	tempArray = [];
+			// }
+			// // calc = eval(param);
+			// // console.log(calc);
+			// // console.log(j +": "+eval(param));
+			// // console.log(param);
+			// // drawSquare(calc);
+			// // console.log(calc);
+		}
+
+		console.log(tempArray);
+
+		drawSquare(tempArray);
+
+		tempArray = [];
+	}
+}
 
 function defineFill (args) {
 	var colour = args[0];
@@ -129,6 +176,8 @@ function drawSquare (args) {
 	var w = args[2];
 	var h = args[3];
 
+	console.log(args);
+
 	ctx.beginPath();
 	ctx.rect(x, y, w, h);
 	ctx.stroke();
@@ -175,6 +224,127 @@ ctx.fillStyle = "rgba(0, 0, 0, 0)";
 ctx.strokeStyle = "rgba(0, 0, 0, 1)";
 
 callDrawFunctions(returnImageSplit(image));
+
+// var TinyPath = function (func) {
+// 	this.drawFunctions = {}
+
+// 	this.test = "YEP";
+
+// 	this.register = function (shortcut, func) {
+// 		this.drawFunctions[shortcut] = func;
+// 	}
+
+// 	this.initialise = function () {
+// 		var prototypes = Object.getPrototypeOf(this);
+
+// 		for (var proto in prototypes) {
+// 			// this[proto].init();
+// 			// this[proto].render();
+
+// 			this[proto]();
+// 			this[proto];
+
+// 			console.log(proto);
+// 			// console.log(this[proto].properties);
+// 		}	
+// 	}
+
+// 	this.initialise();
+// 	// console.log(this.drawFunctions);
+// }
+
+
+// TinyPath.prototype.path = function () {
+// 	console.log(this.test);
+
+// 	this.draw = function () {
+// 		console.log("I AM DRAW");
+// 	}
+// }
+// // TinyPath.prototype.path = {
+// 	self: this,
+// 	arguments: [],
+
+// 	init: function (ctx, args) {
+// 		console.log(this.test);
+// 	},
+
+// 	render: function () {
+// 		console.log("Render this!");
+// 	}
+// };
+
+
+// var tp = new TinyPath();
+
+// console.log(tp);
+
+// tp.init();
+
+var GameObject = function(width, height) {
+    this.x = Math.floor((Math.random() * 800) + 1);
+    this.y = Math.floor((Math.random() * 450) + 1);
+    this.width = width;
+    this.height = height;
+    return this;
+};
+ 
+// (re)define the GameObject prototype object
+GameObject.prototype = {
+    x: 0,
+    y: 0,
+    width: 5,
+    width: 5,
+    draw: function() {
+        console.log(this.x);
+    }
+};
+
+// var go = new GameObject();
+
+// go.draw();
+
+
+
+// TinyPath.register("b", "bezier");
+
+// var TinyPath = function (ctx, arr) {
+
+// 	this.returnImageSplit = function (arr) {
+// 		var splits = [];
+// 		var parts = [];
+
+// 		for (var i=arr.length-1; i>=0; i--) {
+// 			for (var key in drawFunctions) {
+// 				if (arr[i] == key) {
+// 					splits.push(i);
+// 				}
+// 			}
+// 		};
+
+// 		for (var j=splits.length-1; j>=0; j--) {
+// 			parts.push( arr.slice(splits[j], splits[j-1]) );
+// 		};
+
+// 		return parts;
+// 	}
+
+// 	this.callDrawFunctions = function (arr) {
+// 		for (var i=arr.length-1; i>=0; i--) {
+// 			for (var key in drawFunctions) {
+// 				if (key == arr[i][0]) {
+// 					argArray = arr[i].slice(1, arr.length[i]);
+// 					func = drawFunctions[key];
+// 					this[func](argArray);
+// 				}
+// 			}
+// 		};
+// 	}
+// }
+
+// var tinyImage = new TinyPath(ctx, image);
+
+// console.log(tinyImage);
 
 
 // TinyPath.prototype.drawBezier (arr) {
