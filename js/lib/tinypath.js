@@ -15,6 +15,10 @@ var TinyPath = function (canvas, array) {
 	}
 
 	this.draw = function () {
+		this.canvas.fillStyle = "rgba(255, 255, 255, 0)";	// Defaults for now
+		this.canvas.strokeStyle = "black";
+		this.canvas.lineWidth = 1;
+
 		this.renderScene(this.returnImageSplit());
 	}
 
@@ -95,6 +99,9 @@ TinyPath.prototype.renderScene = function (imageSplitArray) {
 		this.callDrawFunction(singleArray);
 	}
 }
+
+
+
 
 // Draw Tools
 
@@ -201,5 +208,33 @@ TinyPath.prototype.drawEclipse = {						// http://stackoverflow.com/questions/21
 		this.ctx.closePath();
 		this.ctx.stroke();
 		this.ctx.fill();
+	}
+}
+
+TinyPath.prototype.defineFill = {
+	init: function (parent) {
+		parent.register("$f", this);
+		this.ctx = parent.canvas;
+	},
+
+	draw: function (args) {
+		var colour = args[0];
+
+		this.ctx.fillStyle = colour;
+	}
+}
+
+TinyPath.prototype.defineStroke = {
+	init: function (parent) {
+		parent.register("$s", this);
+		this.ctx = parent.canvas;
+	},
+
+	draw: function (args) {
+		var colour = args[0];
+		var width = args[1];
+
+		this.ctx.strokeStyle = colour;
+		this.ctx.lineWidth = width;
 	}
 }
