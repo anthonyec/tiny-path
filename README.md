@@ -92,7 +92,26 @@ TinyPath.prototype.drawImage = {
 	}
 }
 ```
-
-
-
 *If you got TinyPath from a box and/or also exchanged money for it then you have probably been ripped off sorry.
+
+Using the Loop function AKA the one know as ":x"
+=================
+The loop function allows you to loop any drawing function a set number of times and change the arguments on each iteration. It's really powerful and can create some amazing effects. It could probably also be dangerous. It uses the eval function as a quick and dirty way to evaulate the arguments. Which is cool because it allows you to use any of Javascripts math functions. You can also type in any other Javascript and it will excute it."
+
+Without using the **drawLoop** function:
+```Javascript
+var image = [	":s", 10, 10, 50, 50, 
+				":s", 70, 10, 50, 50, 
+				":s", 130, 10, 50, 50,
+				":s", 190, 10, 50, 50,
+				":s", 250, 10, 50, 50
+			];
+```
+
+Using the **drawLoop** function:
+```Javascript
+var image = [	
+				":x", 5, ">:s", "10+60*i", 10, 50, 50
+			]
+```
+You'll have to decide when it's best to use the loop function. It reduces file size but at the cost of a bit of performance.
