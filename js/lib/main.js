@@ -11,6 +11,12 @@ var image = ["p",
 				250, 250,
 				400, 220,
 			"x", 
+				50, "-s", 
+				"400+5*i", "390+0", 
+				"2", "Math.sin(i/10)*100-100", 
+			"#f",
+				"red",
+			"x", 
 				20, "-s", 
 				"400+15*i", "400+-i*10", 
 				"10", "10+i*10", 
@@ -118,7 +124,7 @@ function drawLoop (args) {
 			// // console.log(calc);
 		}
 
-		console.log(tempArray);
+		// console.log(tempArray);
 
 		drawSquare(tempArray);
 
@@ -176,7 +182,7 @@ function drawSquare (args) {
 	var w = args[2];
 	var h = args[3];
 
-	console.log(args);
+	// console.log(args);
 
 	ctx.beginPath();
 	ctx.rect(x, y, w, h);
