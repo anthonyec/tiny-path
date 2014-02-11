@@ -18,10 +18,15 @@
 		<canvas id="tiny-path-canvas-2" width="420" height="280"></canvas>
 	</div>
 
+	<div class="thumb">
+		<canvas id="tiny-path-canvas-3" width="420" height="280"></canvas>
+	</div>
+
 	<script type="text/javascript" src="js/lib/tinypath.js"></script>
 	
 	<script>	
 		var thumb1 = [	
+						":r", 158, 72, 103, 103, 17,
 						":p", 140, 172, 260, 243,
 						":p", 369, 213, 353, 279,
 						":p", 419, 29, 358, 66,
@@ -32,17 +37,30 @@
 						":p", 205, 84, 205, 162,
 						":x", 3, ">:c", 237, "99+24.5*i", 5,
 						":x", 7, ">:s", 177, "94+9*i", 4, 5,
-
 						":s", 185, 94, 11, 5,
 						":s", 185, 103, 15, 5,
 						":x", 5, ">:s", 185, "112+9*i", 11, 5,
-
-						":r", 158, 72, 103, 103, 17,
 					];
 
 		var thumb2 = [	
-						":x", 40, ">:p", 210, 140, "(210+50)*Math.cos( (i+50)*Math.PI/180 )", "(140+50)*Math.sin( (i+50)*Math.PI/180 )"
+						":c", 210, 140, 90,
+						":x", 12, ">:l", 210, 140, 80, "0+30*i",
+						"$f", "white", "$s", "white",
+						":c", 210, 140, 74,
+						"$f", "rgba(0,0,0,0)", "$s", "black",
+						":c", 210, 140, 65,
+						":x", 1, ">:l", 210, 140, 50, "( (360/12)*(new Date()).getHours()+Math.random()*0 )",
+						":x", 1, ">:l", 210, 140, 80, "( (360/60)*(new Date()).getMinutes()+Math.random()*0 )",
+						"$s", "red",
+						":x", 1, ">:l", 210, 140, 80, "( (360/60)*(new Date()).getSeconds()+Math.random()*0 )",
+						"$f", "white","$s", "black",
+						":c", 210, 140, 7,
 					];
+
+		var thumb3 = [	
+				":w", 210, 140, 200, 45
+			];
+
 
 	var canvas1 = document.getElementById("tiny-path-canvas-1").getContext("2d");
 	var newImage1 = new TinyPath(canvas1, thumb1).draw();
@@ -50,8 +68,17 @@
 	var canvas2 = document.getElementById("tiny-path-canvas-2").getContext("2d");
 	var newImage2 = new TinyPath(canvas2, thumb2).draw();
 
+	var canvas3 = document.getElementById("tiny-path-canvas-3").getContext("2d");
+	var newImage3 = new TinyPath(canvas3, thumb3).draw();
+
+	setInterval(function () {
+		canvas2.clearRect(0, 0, 800, 450);
+		newImage2 = new TinyPath(canvas2, thumb2).draw();
+	}, 100);
+
 	canvas1.translate(0.5, 0.5);
 	canvas2.translate(0.5, 0.5);
+	canvas3.translate(0.5, 0.5);
 
 	document.getElementById("tiny-path-canvas-1").onclick = function (e) {
 		console.log( (e.x-100) + ", " + (e.y-100));
